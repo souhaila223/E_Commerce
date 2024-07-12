@@ -7,7 +7,7 @@ export const getAllProducts = async () => {
 export const seedInitialProducts = async () => {
     const products = [
         { title: "Hp Laptop", image: "https://www.trustedreviews.com/wp-content/uploads/sites/54/2023/01/HP-Envy-16-07-920x613.jpg", price: 1200, stock: 8 },
-        // { title: "Laptop", image: "image2.jpg", price: 20, stock: 80 },
+         { title: "Laptop", image: "image2.jpg", price: 20, stock: 80 }
         // { title: "Product 3", image: "image3.jpg", price: 15, stock: 50 },
         // { title: "Product 4", image: "image4.jpg", price: 25, stock: 70 },
         // { title: "Product 5", image: "image5.jpg", price: 5, stock: 90 },
