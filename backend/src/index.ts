@@ -6,13 +6,15 @@ import userRoute from "./routes/userRoute";
 import productRoute from "./routes/productRoute";
 import cartRoute from "./routes/cartRoute";
 import { seedInitialProducts } from "./services/productService";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express(); // main app of express
 const port = 3001; // determine the port
 
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 mongoose
   .connect(process.env.DATABASE_URL || '')
@@ -24,7 +26,7 @@ seedInitialProducts();
 
 // any route has to be determined in the index!
 app.use('/user', userRoute)
-app.use('/products', productRoute)
+app.use('/product', productRoute)
 app.use('/cart', cartRoute)
 
 
