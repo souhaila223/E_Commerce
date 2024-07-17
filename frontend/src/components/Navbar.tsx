@@ -10,9 +10,10 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { ShoppingCart } from "@mui/icons-material";
 import { useAuth } from "../context/Auth/AuthContext";
 import Grid from "@mui/material/Grid";
-import { Button } from "@mui/material";
+import { Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
@@ -33,14 +34,17 @@ function Navbar() {
 
   const handleLogin = () => {
     navigate("/login");
-  }
+  };
 
   const handleLogout = () => {
     logout();
     navigate("/");
     handleCloseUserMenu();
+  };
 
-  }
+  const handleCart = () => {
+    navigate("/cart");
+  };
 
   return (
     <AppBar position="static">
@@ -77,7 +81,18 @@ function Navbar() {
                 Tech Hub
               </Typography>
             </Box>
-            <Box sx={{ flexGrow: 0 }}>
+            <Box
+              gap={4}
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <IconButton aria-label="cart" onClick={handleCart}>
+                <Badge badgeContent={4} color="secondary">
+                  <ShoppingCart sx={{color: '#ffffff'}} />
+                </Badge>
+              </IconButton>
               {isAuthenticated ? (
                 <>
                   <Tooltip title="Open settings">
@@ -93,7 +108,7 @@ function Navbar() {
                       <Grid item>
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                           <Avatar
-                            alt={username || ''}
+                            alt={username || ""}
                             src="/static/images/avatar/2.jpg"
                           />
                         </IconButton>
@@ -125,7 +140,13 @@ function Navbar() {
                   </Menu>
                 </>
               ) : (
-                <Button variant="contained" color="success"onClick={handleLogin}>Login</Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleLogin}
+                >
+                  Login
+                </Button>
               )}
             </Box>
           </Box>
