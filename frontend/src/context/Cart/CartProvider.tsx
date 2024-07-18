@@ -1,14 +1,48 @@
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { CartContext } from "./CartContext";
 import { CartItem } from "../../types/CartItem";
 import { Base_URL } from "../../constants/baseUrl";
 import { useAuth } from "../Auth/AuthContext";
 
 const CartProvider: FC<PropsWithChildren> = ({ children }) => {
-    const { token } = useAuth()
+  const { token } = useAuth();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    const fetchCart = async () => {
+      const response = await fetch(`${Base_URL}/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        setError("Failed to fetch user cart. Please try again");
+      }
+
+      const cart = await response.json();
+
+      const cartItemMapped = cart.items.map(
+        ({ product, quantity }: { product: any; quantity: number }) => ({
+          productId: product._id,
+          title: product.title,
+          image: product.image,
+          quantity,
+          unitPrice: product.unitPrice,
+        })
+      );
+
+      setCartItems(cartItemMapped);
+    };
+
+    fetchCart();
+  }, [token]);
 
   const addItemToCart = async (productId: string) => {
     try {
@@ -16,7 +50,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           productId,
@@ -35,13 +69,15 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         setError("Failed to parse cart data");
       }
 
-      const cartItemMapped = cart.items.map(({ product, quantity }: {product: any; quantity: number}) => ({
-        productId: product._id,
-        title: product.title,
-        image: product.image,
-        quantity,
-        unitPrice: product.unitPrice,
-      }));
+      const cartItemMapped = cart.items.map(
+        ({ product, quantity }: { product: any; quantity: number }) => ({
+          productId: product._id,
+          title: product.title,
+          image: product.image,
+          quantity,
+          unitPrice: product.unitPrice,
+        })
+      );
 
       setCartItems([...cartItemMapped]);
       setTotalAmount(cart.totalAmount);
