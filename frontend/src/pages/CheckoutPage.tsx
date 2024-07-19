@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/Auth/AuthContext";
 
 const CheckoutPage = () => {
-  const { cartItems, totalAmount } = useCart();
+  const { cartItems, totalAmount, clearCart } = useCart();
 
   const { token } = useAuth();
 
@@ -32,6 +32,8 @@ const CheckoutPage = () => {
     });
 
     if(!response.ok) return;
+    
+    clearCart(); // Clear the cart after successful order
 
     navigate('/order-success');
   };
