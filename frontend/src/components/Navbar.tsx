@@ -99,7 +99,7 @@ function Navbar() {
             >
               <IconButton aria-label="cart" onClick={handleCart}>
                 <Badge badgeContent={cartItems.length} color="secondary">
-                  <ShoppingCart sx={{color: '#EF5A6F'}} />
+                  <ShoppingCart sx={{color: '#FFFFFF'}} />
                 </Badge>
               </IconButton>
               {isAuthenticated ? (
