@@ -6,59 +6,60 @@ import { useAuth } from "../context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
-    const [error, setError] = useState("");
-    const firstNameRef = useRef<HTMLInputElement>(null);
-    const lastNameRef = useRef<HTMLInputElement>(null);
-    const emailRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState("");
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
-    const navigate = useNavigate();
-    const {login} = useAuth();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-    
+  const onSubmit = async () => {
+    const firstName = firstNameRef.current?.value;
+    const lastName = lastNameRef.current?.value;
+    const email = emailRef.current?.value;
+    const password = passwordRef.current?.value;
 
-    const onSubmit = async () => {
-        const firstName = firstNameRef.current?.value
-        const lastName = lastNameRef.current?.value
-        const email = emailRef.current?.value
-        const password = passwordRef.current?.value
+    // Validate the form data
+    if (!firstName || !lastName || !email || !password) {
+      setError("Check submitted data!");
+      return;
+    }
 
-        // Validate the form data
-        if(!firstName || !lastName || !email || !password) {
-            setError("Check submitted data!");
-            return;
-        }
+    // Make the call to API to create the user
+    const response = await fetch(`${Base_URL}/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+      }),
+    });
 
-        // Make the call to API to create the user
-        const response = await fetch(`${Base_URL}/user/register`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                email,
-                password,
-            }),
-        });
+    if (!response.ok) {
+      setError("Unable to register user, please try different credentials!");
+      return;
+    }
 
-        if(!response.ok) {
-            setError("Unable to register user, please try different credentials!");
-            return;
-        }
+    const token = await response.json();
 
-        const token = await response.json();
+    if (!token) {
+      setError("Incorrect token");
+      return;
+    }
 
-        if(!token) {
-            setError("Incorrect token")
-            return;
-        }
+    login(email, token);
+    navigate("/");
+  };
 
-        login(email, token)
-        navigate("/");
-
-    };
+  const redirectToLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <Container>
@@ -83,12 +84,29 @@ const RegisterPage = () => {
             p: 2,
           }}
         >
-          <TextField inputRef={firstNameRef} label="First Name" name="firstName" />
+          <TextField
+            inputRef={firstNameRef}
+            label="First Name"
+            name="firstName"
+          />
           <TextField inputRef={lastNameRef} label="Last Name" name="lastName" />
           <TextField inputRef={emailRef} label="Email" name="email" />
-          <TextField inputRef={passwordRef} type="password" label="Password" name="password" />
-          <Button onClick={onSubmit} variant="contained">Register</Button>
-          {error && <Typography sx={{ color: "red"}}>{error}</Typography>}
+          <TextField
+            inputRef={passwordRef}
+            type="password"
+            label="Password"
+            name="password"
+          />
+          <Button onClick={onSubmit} variant="contained">
+            Register
+          </Button>
+          {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
+        </Box>
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body2">
+            Already have an account?{" "}
+            <Button onClick={redirectToLogin}>Login here</Button>
+          </Typography>
         </Box>
       </Box>
     </Container>
