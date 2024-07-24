@@ -10,16 +10,18 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { ShoppingCart } from "@mui/icons-material";
+import { Favorite, ShoppingCart } from "@mui/icons-material";
 import { useAuth } from "../context/Auth/AuthContext";
 import Grid from "@mui/material/Grid";
 import { Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/Cart/CartContext";
+import { useFavorites } from "../context/Favorites/FavoritesContext";
 
 function Navbar() {
   const { username, isAuthenticated, logout } = useAuth();
   const { cartItems } = useCart();
+  const { favoriteItems } = useFavorites();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -51,6 +53,10 @@ function Navbar() {
 
   const handleCart = () => {
     navigate("/cart");
+  };
+
+  const handleFavorites = () => {
+    navigate("/favorites");
   };
 
   return (
@@ -97,6 +103,11 @@ function Navbar() {
               alignItems="center"
               justifyContent="center"
             >
+              <IconButton aria-label="favorites" onClick={handleFavorites}>
+                <Badge badgeContent={favoriteItems.length} color="secondary">
+                  <Favorite sx={{color: '#ffffff'}} />
+                </Badge>
+              </IconButton>
               <IconButton aria-label="cart" onClick={handleCart}>
                 <Badge badgeContent={cartItems.length} color="secondary">
                   <ShoppingCart sx={{color: '#ffffff'}} />

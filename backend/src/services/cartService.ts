@@ -122,7 +122,7 @@ export const updateItemInCart = async ({
   );
 
   if (!existInCart) {
-    return { data: "iItem does not exist in cart!", statusCode: 400 };
+    return { data: "Item does not exist in cart!", statusCode: 400 };
   }
 
   // Fetch the product

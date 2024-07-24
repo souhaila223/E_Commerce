@@ -10,11 +10,14 @@ import CartProvider from "./context/Cart/CartProvider";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import MyOrderPage from "./pages/MyOrdersPage";
+import FavoritesProvider from "./context/Favorites/FavoritesProvider";
+import FavoritesPage from "./pages/FavoritesPage";
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
+      <FavoritesProvider>
         <BrowserRouter>
           <Navbar />
           <Routes>
@@ -26,9 +29,11 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-success" element={<OrderSuccessPage />} />
               <Route path="/my-orders" element={<MyOrderPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
+      </FavoritesProvider>
       </CartProvider>
     </AuthProvider>
   );

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 import express from "express";
 import mongoose from "mongoose";
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 mongoose
-  .connect(process.env.DATABASE_URL || '')
+  .connect("mongodb://localhost:27017/e-commerce")
   .then(() => console.log("Mongo connected!"))
   .catch((err) => console.log("Failed to connect ", err));
 
@@ -25,11 +25,10 @@ mongoose
 seedInitialProducts();
 
 // any route has to be determined in the index!
-app.use('/user', userRoute)
-app.use('/product', productRoute)
-app.use('/cart', cartRoute)
+app.use("/user", userRoute);
+app.use("/product", productRoute);
+app.use("/cart", cartRoute);
 
-
-  app.listen(port, () => {
-    console.log(`Server is running at: http://localhost:${port}`)
-  })
+app.listen(port, () => {
+  console.log(`Server is running at: http://localhost:${port}`);
+});

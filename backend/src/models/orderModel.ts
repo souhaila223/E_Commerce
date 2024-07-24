@@ -16,6 +16,7 @@ export interface IOrder extends Document {
     total: number;             // Total price of the order
     address: string;           // Shipping address for the order
     userId: ObjectId | string; // User ID of the person who placed the order (ObjectId for MongoDB)
+    orderStatus: string;
 }
 
 // Create a schema for order items using the IOrderItem interface
@@ -34,6 +35,7 @@ const OrderSchema = new Schema<IOrder>({
     total: { type: Number, required: true },          // Total price of the order, required field
     address: { type: String, required: true },        // Shipping address, required field
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true }, // User ID, references the "User" collection, required field
+    orderStatus: { type: String, default: 'Pending' },
 });
 
 // Create a model for orders using the OrderSchema
