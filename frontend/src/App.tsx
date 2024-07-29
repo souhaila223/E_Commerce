@@ -12,28 +12,32 @@ import OrderSuccessPage from "./pages/OrderSuccessPage";
 import MyOrderPage from "./pages/MyOrdersPage";
 import FavoritesProvider from "./context/Favorites/FavoritesProvider";
 import FavoritesPage from "./pages/FavoritesPage";
+import AdminDashboardPage from "./pages/AdminDashboard";
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
-      <FavoritesProvider>
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/order-success" element={<OrderSuccessPage />} />
-              <Route path="/my-orders" element={<MyOrderPage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </FavoritesProvider>
+        <FavoritesProvider>
+          <BrowserRouter>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/order-success" element={<OrderSuccessPage />} />
+                <Route path="/my-orders" element={<MyOrderPage />} />
+                <Route path="/favorites" element={<FavoritesPage />} />
+                <Route element={<ProtectedRoute isAdminRoute={true} />}>
+                  <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+                </Route>
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </FavoritesProvider>
       </CartProvider>
     </AuthProvider>
   );

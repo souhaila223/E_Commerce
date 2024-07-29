@@ -8,12 +8,14 @@ interface RegisterParams {
   lastName: string;
   email: string;
   password: string;
+  isAdmin?: boolean;
 }
 export const register = async ({
   firstName,
   lastName,
   email,
   password,
+  isAdmin = false
 }: RegisterParams) => {
   const findUser = await userModel.findOne({ email });
 
@@ -27,10 +29,11 @@ export const register = async ({
     password: hashedPassword,
     firstName,
     lastName,
+    isAdmin,
   });
   await newUser.save();
 
-  return { data: generateJWT({ firstName, lastName, email }), statusCode: 200 };
+  return { data: generateJWT({ firstName, lastName, email, isAdmin }), statusCode: 200 };
 };
 
 interface LoginParams {
@@ -48,12 +51,19 @@ export const login = async ({ email, password }: LoginParams) => {
   const passwordMatch = await bcrypt.compare(password, findUser.password);
 
   if (passwordMatch) {
+    const token = generateJWT({
+      email,
+      firstName: findUser.firstName,
+      lastName: findUser.lastName,
+      isAdmin: findUser.isAdmin,
+    });
+
     return {
-      data: generateJWT({
-        email,
-        firstName: findUser.firstName,
-        lastName: findUser.lastName,
-      }),
+      data: {
+        token,
+        isAdmin: findUser.isAdmin,
+        username: findUser.firstName,
+      },
       statusCode: 200,
     };
   }
@@ -61,9 +71,61 @@ export const login = async ({ email, password }: LoginParams) => {
   return { data: "Incorrect email or password", statusCode: 400 };
 };
 
-interface GetMyOrdersParams {
-  userId: string;
-}
+
+
+  export const getAllUsers = async () => {
+      try {
+        const users = await userModel.find({}, 'firstName lastName email isAdmin').exec();
+        return { statusCode: 200, data: users };
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        return { statusCode: 400, data: "Something went wrong!" };
+      }
+    };
+  
+
+    interface DeleteUser {
+      userId: string;
+    }  
+
+  export const deleteUser = async ({userId}: DeleteUser) => {
+    try {
+      console.log(`Attempting to delete user with ID: ${userId}`); // Add log
+      const user = await userModel.findByIdAndDelete(userId).exec();
+      if (!user) {
+        return { statusCode: 404, data: "User not found" };
+      }
+      console.log(`User deleted successfully: ${userId}`); // Add log
+      return { statusCode: 200, data: "User deleted successfully" };
+    } catch (err) {
+      console.error("Error deleting user:", err); // Add log
+      return { statusCode: 400, data: "Something went wrong!" };
+    }
+  };
+
+
+  export const updateUserAdminStatus = async ({
+    userId,
+    isAdmin,
+  }: {
+    userId: string;
+    isAdmin: boolean;
+  }) => {
+    try {
+      const user = await userModel
+        .findByIdAndUpdate(userId, { isAdmin }, { new: true })
+        .exec();
+      return { statusCode: 200, data: user };
+    } catch (err) {
+      return { statusCode: 400, data: "Something went wrong!" };
+    }
+  };
+
+
+
+  interface GetMyOrdersParams {
+    userId: string;
+  }
 
 export const getMyOrders = async ({ userId }: GetMyOrdersParams) => {
   try {
@@ -86,7 +148,7 @@ export const updateOrderStatus = async ({
       .exec();
     return { statusCode: 200, data: order };
   } catch (err) {
-    return { statusCode: 500, data: "Something went wrong!" };
+    return { statusCode: 400, data: "Something went wrong!" };
   }
 };
 

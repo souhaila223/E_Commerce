@@ -42,15 +42,20 @@ const LoginPage = () => {
       return;
     }
 
-    const token = await response.json();
+    const data = await response.json();
 
-    if (!token) {
+    if (!data.token) {
       setError("Incorrect token");
       return;
     }
 
-    login(email, token);
-    navigate("/");
+    login(email, data.token, data.isAdmin);
+
+    if (data.isAdmin) {
+      navigate("/admin-dashboard");
+    } else {
+      navigate("/");
+    }
   };
 
   const redirectToRegister = () => {

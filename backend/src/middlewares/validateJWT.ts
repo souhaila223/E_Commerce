@@ -40,6 +40,11 @@ const validateJWT = (req: ExtendRequest, res: Response, next: NextFunction) => {
 
         // Fetch user from db based on the payload
         const user = await userModel.findOne({ email: userPayload.email });
+        if (!user) {
+            res.status(403).send("User not found");
+            return;
+        }
+        console.log("User found:", user.email); // Add log
         req.user = user;
         next();
     });

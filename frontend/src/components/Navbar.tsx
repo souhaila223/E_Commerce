@@ -19,7 +19,7 @@ import { useCart } from "../context/Cart/CartContext";
 import { useFavorites } from "../context/Favorites/FavoritesContext";
 
 function Navbar() {
-  const { username, isAuthenticated, logout } = useAuth();
+  const { username, isAuthenticated, isAdmin, logout } = useAuth();
   const { cartItems } = useCart();
   const { favoriteItems } = useFavorites();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -40,11 +40,15 @@ function Navbar() {
     navigate("/login");
   };
 
+  const handleUserManagement = () => {
+    navigate("/user/users");
+    handleCloseUserMenu();
+  };
+
   const HandleMyOrders = () => {
     navigate("/my-orders");
     handleCloseUserMenu();
-
-  }
+  };
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -57,6 +61,14 @@ function Navbar() {
 
   const handleFavorites = () => {
     navigate("/favorites");
+  };
+
+  const handleLogoClick = () => {
+    if (isAdmin) {
+      navigate("/admin-dashboard");
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -72,29 +84,33 @@ function Navbar() {
               width: "100%",
             }}
           >
-            <Button variant="text" sx={{ color: '#fff'}} onClick={() => navigate("/")}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
+            <Button
+              variant="text"
+              sx={{ color: "#fff" }}
+              onClick={handleLogoClick}
             >
-              <AdbIcon sx={{ display: "flex", mr: 1 }} />
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
+              <Box
                 sx={{
-                  mr: 2,
-                  display: { xs: "none", md: "flex" },
-                  fontFamily: "monospace",
-                  fontWeight: 700,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                Tech Hub
-              </Typography>
-            </Box>
+                <AdbIcon sx={{ display: "flex", mr: 1 }} />
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="a"
+                  sx={{
+                    mr: 2,
+                    display: { xs: "none", md: "flex" },
+                    fontFamily: "monospace",
+                    fontWeight: 700,
+                  }}
+                >
+                  Tech Hub
+                </Typography>
+              </Box>
             </Button>
             <Box
               gap={4}
@@ -103,16 +119,23 @@ function Navbar() {
               alignItems="center"
               justifyContent="center"
             >
-              <IconButton aria-label="favorites" onClick={handleFavorites}>
-                <Badge badgeContent={favoriteItems.length} color="secondary">
-                  <Favorite sx={{color: '#ffffff'}} />
-                </Badge>
-              </IconButton>
-              <IconButton aria-label="cart" onClick={handleCart}>
-                <Badge badgeContent={cartItems.length} color="secondary">
-                  <ShoppingCart sx={{color: '#FFFFFF'}} />
-                </Badge>
-              </IconButton>
+              {!isAdmin && (
+                <>
+                  <IconButton aria-label="favorites" onClick={handleFavorites}>
+                    <Badge
+                      badgeContent={favoriteItems.length}
+                      color="secondary"
+                    >
+                      <Favorite sx={{ color: "#ffffff" }} />
+                    </Badge>
+                  </IconButton>
+                  <IconButton aria-label="cart" onClick={handleCart}>
+                    <Badge badgeContent={cartItems.length} color="secondary">
+                      <ShoppingCart sx={{ color: "#FFFFFF" }} />
+                    </Badge>
+                  </IconButton>
+                </>
+              )}
               {isAuthenticated ? (
                 <>
                   <Tooltip title="Open settings">
@@ -152,8 +175,15 @@ function Navbar() {
                     onClose={handleCloseUserMenu}
                   >
                     <MenuItem onClick={HandleMyOrders}>
-                      <Typography textAlign="center">My Orders</Typography>
+                      <Typography textAlign="center">Orders</Typography>
                     </MenuItem>
+                    {isAdmin && (
+                      <MenuItem onClick={handleUserManagement}>
+                        <Typography textAlign="center">
+                          Users
+                        </Typography>
+                      </MenuItem>
+                    )}
                     <MenuItem onClick={handleLogout}>
                       <Typography textAlign="center">Logout</Typography>
                     </MenuItem>
