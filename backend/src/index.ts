@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import userRoute from "./routes/userRoute";
 import productRoute from "./routes/productRoute";
 import cartRoute from "./routes/cartRoute";
+import orderRoute from "./routes/orderRoute";
 import { seedInitialProducts } from "./services/productService";
 import cors from "cors";
 
@@ -28,6 +29,7 @@ seedInitialProducts();
 app.use("/user", userRoute);
 app.use("/product", productRoute);
 app.use("/cart", cartRoute);
+app.use("/order", orderRoute);
 
 app.listen(port, () => {
   console.log(`Server is running at: http://localhost:${port}`);

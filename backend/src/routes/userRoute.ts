@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteUser, getAllUsers, getMyOrders, login, register, updateOrderStatus, updateUserAdminStatus } from "../services/userService";
+import { deleteUser, getAllUsers, login, register, updateUserStatus } from "../services/userService";
 import { ExtendRequest } from "../types/extendedRequest";
 import validateJWT from "../middlewares/validateJWT";
 import isAdmin from "../middlewares/IsAdmin";
@@ -49,7 +49,7 @@ router.put("/userStatus/:userId", validateJWT, isAdmin, async (request, response
   try {
     const { userId } = request.params;
     const { isAdmin } = request.body;
-    const { statusCode, data } = await updateUserAdminStatus({ userId, isAdmin });
+    const { statusCode, data } = await updateUserStatus({ userId, isAdmin });
     response.status(statusCode).json(data);
   } catch (err) {
     response.status(500).send("Something went wrong!");
@@ -71,26 +71,5 @@ router.delete("/user/:userId", validateJWT, isAdmin, async (req, res) => {
   }
 });
 
-
-
-router.get("/my-orders", validateJWT, async (request: ExtendRequest, response) => {
-  try {
-    const userId = request?.user?._id;
-    const { data, statusCode} = await getMyOrders({userId});
-    response.status(200).send(data);
-  } catch (err) {
-    response.status(500).send("Something went wrong!");
-  }
-});
-
-router.put("/order-status", validateJWT, isAdmin, async (request, response) => {
-  try {
-    const { orderId, status } = request.body;
-    const { data, statusCode } = await updateOrderStatus({ orderId, status });
-    response.status(statusCode).send(data);
-  } catch (err) {
-    response.status(500).send("Something went wrong!");
-  }
-});
 
 export default router;

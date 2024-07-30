@@ -18,6 +18,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   );
   const [myOrders, setMyOrders] = useState<any[]>([]);
   const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [allOrders, setAllOrders] = useState<any[]>([]);
 
   const isAuthenticated = !!token; // evaluate if token has a value
 
@@ -40,7 +41,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const getMyOrders = async () => {
-    const response = await fetch(`${Base_URL}/user/my-orders`, {
+    const response = await fetch(`${Base_URL}/order/my-orders`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -69,6 +70,30 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+  const getAllOrders = async () => {
+    const response = await fetch(`${Base_URL}/order/orders`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setAllOrders(data);
+    }
+  };
+
+  const updateUserStatus = async (userId: string, isAdmin: boolean) => {
+    await fetch(`${Base_URL}/user/${userId}/admin-status`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isAdmin }),
+    });
+    await getAllUsers();
+  };
 
   const deleteUser = async (userId: string) => {
     try {
@@ -91,6 +116,32 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+  const updateOrderStatus = async (orderId: string, status: string) => {
+    try {
+      const response = await fetch(`${Base_URL}/order/${orderId}/status`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderId, status }),
+      });
+
+      if (response.ok) {
+        // Update the state with the new order status
+        setAllOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === orderId ? { ...order, orderStatus: status } : order
+          )
+        );
+      } else {
+        const errorMessage = await response.text();
+      console.error("Failed to update order status:", errorMessage);
+      }
+    }catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
 
   return (
     <AuthContext.Provider
@@ -101,11 +152,15 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         isAdmin,
         myOrders,
         allUsers,
+        allOrders,
         login,
         logout,
         getMyOrders,
         getAllUsers,
+        getAllOrders,
+        updateUserStatus,
         deleteUser,
+        updateOrderStatus,
       }}
     >
       {children}

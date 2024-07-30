@@ -1,7 +1,6 @@
 import userModel from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { orderModel } from "../models/orderModel";
 
 interface RegisterParams {
   firstName: string;
@@ -104,7 +103,7 @@ export const login = async ({ email, password }: LoginParams) => {
   };
 
 
-  export const updateUserAdminStatus = async ({
+  export const updateUserStatus = async ({
     userId,
     isAdmin,
   }: {
@@ -121,36 +120,6 @@ export const login = async ({ email, password }: LoginParams) => {
     }
   };
 
-
-
-  interface GetMyOrdersParams {
-    userId: string;
-  }
-
-export const getMyOrders = async ({ userId }: GetMyOrdersParams) => {
-  try {
-    return { data: await orderModel.find({ userId }), statusCode: 200 };
-  } catch (err) {
-    throw err;
-  }
-};
-
-export const updateOrderStatus = async ({
-  orderId,
-  status,
-}: {
-  orderId: string;
-  status: string;
-}) => {
-  try {
-    const order = await orderModel
-      .findByIdAndUpdate(orderId, { orderStatus: status }, { new: true })
-      .exec();
-    return { statusCode: 200, data: order };
-  } catch (err) {
-    return { statusCode: 400, data: "Something went wrong!" };
-  }
-};
 
 const generateJWT = (data: any) => {
   return jwt.sign(data, process.env.JWT_SECRET || ""); // this key used to encrypt token
