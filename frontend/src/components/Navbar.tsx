@@ -41,12 +41,12 @@ function Navbar() {
   };
 
   const handleUserManagement = () => {
-    navigate("/user/users");
+    navigate("/admin/users");
     handleCloseUserMenu();
   };
 
   const HandleMyOrders = () => {
-    navigate("/my-orders");
+    navigate("/admin/orders");
     handleCloseUserMenu();
   };
   const handleLogout = () => {
