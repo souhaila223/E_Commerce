@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteUser, getAllUsers, login, register, updateUserStatus } from "../services/userService";
+import { deleteUser, getAllUsers, login, register, updateUserStatus, resetPassword } from "../services/userService";
 import { ExtendRequest } from "../types/extendedRequest";
 import validateJWT from "../middlewares/validateJWT";
 import isAdmin from "../middlewares/IsAdmin";
@@ -22,6 +22,7 @@ router.post("/register", async (request, response) => {
   }
 });
 
+
 router.post("/login", async (request, response) => {
   try {
     const { email, password } = request.body;
@@ -31,6 +32,7 @@ router.post("/login", async (request, response) => {
     response.status(500).send("Something went wrong!");
   }
 });
+
 
 
 router.get("/users", validateJWT, isAdmin, async (request, response) => {
@@ -44,6 +46,24 @@ router.get("/users", validateJWT, isAdmin, async (request, response) => {
     response.status(500).send("Something went wrong!");
   }
 });
+
+
+router.put("/:userId/reset-password", validateJWT, isAdmin, async (request, response) => {
+  try {
+    const { userId } = request.params;
+    const { newPassword } = request.body;
+
+    if (!newPassword) {
+      return response.status(400).send("New password is required");
+    }
+
+    const { statusCode, data } = await resetPassword(userId, newPassword);
+    response.status(statusCode).send(data);
+  } catch (err) {
+    response.status(500).send("Something went wrong!");
+  }
+});
+
 
 router.put("/userStatus/:userId", validateJWT, isAdmin, async (request, response) => {
   try {

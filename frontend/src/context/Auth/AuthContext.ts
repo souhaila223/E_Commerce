@@ -14,6 +14,7 @@ interface AuthContextType {
   getAllUsers: () => void;
   getAllOrders: () => void; 
   updateUserStatus: (userId: string, isAdmin: boolean) => void;
+  resetPassword: (userId: string, newPassword: string) => void;
   deleteUser: (userId: string) => void;
   updateOrderStatus: (orderId: string, status: string) => void;
 }
@@ -32,6 +33,7 @@ export const AuthContext = createContext<AuthContextType>({
   getAllUsers: () => {},
   getAllOrders: () => {},
   updateUserStatus: () => {},
+  resetPassword: () => {},
   deleteUser: () => {},
   updateOrderStatus: () => {},
 });
