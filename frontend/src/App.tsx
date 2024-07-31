@@ -15,6 +15,7 @@ import FavoritesPage from "./pages/FavoritesPage";
 import AdminDashboardPage from "./pages/AdminDashboard";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage"
+import AddProductPage from "./pages/AddProductPage";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                   <Route path="/admin-dashboard"element={<AdminDashboardPage />}/>
                   <Route path="/admin/users" element={<AdminUsersPage />} />
                   <Route path="/admin/orders" element={<AdminOrdersPage />} />
+                  <Route path="/admin/add-product" element={<AddProductPage/>} />
                 </Route>
               </Route>
             </Routes>

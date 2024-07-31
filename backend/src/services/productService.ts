@@ -1,7 +1,14 @@
 import productModel from "../models/productModel";
+import { IProduct } from "../models/productModel";
+
 
 export const getAllProducts = async () => {
     return await productModel.find();
+}
+
+export const addProduct = async (product: IProduct) => {
+    const newProduct = new productModel(product);
+    return await newProduct.save();
 }
 
 export const seedInitialProducts = async () => {
@@ -15,8 +22,7 @@ export const seedInitialProducts = async () => {
             { title: "Huawei", image: "https://cdn.vox-cdn.com/thumbor/JXchU0-8sKt-lyCyx4wrgjR7Wgg=/0x0:2040x1360/2400x1356/filters:focal(1040x1068:1041x1069)/cdn.vox-cdn.com/uploads/chorus_asset/file/22908079/akrales_211005_4788_0095.jpg", price: 1700, stock: 5 },
             
         ];
-    
-    
+     
         for (const product of products) {
             const existingProduct = await productModel.findOne({ title: product.title });
             if (!existingProduct) {

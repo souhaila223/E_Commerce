@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllProducts } from "../services/productService";
+import { addProduct, getAllProducts } from "../services/productService";
 
 const router = express.Router();
 
@@ -7,6 +7,16 @@ router.get("/", async (req, res) => {
   try {
     const products = await getAllProducts();
     res.status(200).send(products);
+  } catch (err) {
+    res.status(500).send("Something went wrong!");
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const product = req.body;
+    const newProduct = await addProduct(product);
+    res.status(201).send(newProduct);
   } catch (err) {
     res.status(500).send("Something went wrong!");
   }
