@@ -3,7 +3,8 @@ import { useAuth } from "../context/Auth/AuthContext";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ConfirmationModal from "../components/ConfirmationModal";
 import PasswordResetModal from "../components/PasswordResetModal";
-import LockResetOutlinedIcon from '@mui/icons-material/LockResetOutlined';
+import SuccessModal from "../components/SuccessModal";
+import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import {
   Button,
   Container,
@@ -14,12 +15,13 @@ import {
   TableRow,
 } from "@mui/material";
 
-
 const AdminUsersPage = () => {
   const { allUsers, getAllUsers, deleteUser, resetPassword } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openResetModal, setOpenResetModal] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     getAllUsers();
@@ -35,9 +37,11 @@ const AdminUsersPage = () => {
     setSelectedUserId(null);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (selectedUserId) {
-      deleteUser(selectedUserId);
+      await deleteUser(selectedUserId);
+        setSuccessMessage("User deleted successfully");
+        setOpenSuccessModal(true);
     }
     handleCloseDelete();
   };
@@ -52,11 +56,17 @@ const AdminUsersPage = () => {
     setSelectedUserId(null);
   };
 
-  const handleConfirmReset = (newPassword: string) => {
+  const handleConfirmReset = async (newPassword: string) => {
     if (selectedUserId) {
-      resetPassword(selectedUserId, newPassword);
+      await resetPassword(selectedUserId, newPassword);
+        setSuccessMessage("Password reset successfully");
+        setOpenSuccessModal(true);
     }
     handleCloseReset();
+  };
+
+  const handleCloseSuccess = () => {
+    setOpenSuccessModal(false);
   };
 
   return (
@@ -82,11 +92,11 @@ const AdminUsersPage = () => {
               <TableCell>{user.email}</TableCell>
               <TableCell>{String(user.isAdmin)}</TableCell>
               <TableCell>
-              <Button
+                <Button
                   color="primary"
                   onClick={() => handleOpenReset(user._id)}
                 >
-                  <LockResetOutlinedIcon/>
+                  <LockResetOutlinedIcon />
                 </Button>
                 <Button
                   color="error"
@@ -111,6 +121,12 @@ const AdminUsersPage = () => {
         open={openResetModal}
         handleClose={handleCloseReset}
         handleConfirm={handleConfirmReset}
+      />
+
+      <SuccessModal
+        open={openSuccessModal}
+        handleClose={handleCloseSuccess}
+        message={successMessage}
       />
     </Container>
   );
