@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useAuth } from "../context/Auth/AuthContext";
-import { Container, Grid, Paper, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Container, Grid } from "@mui/material";
+import CustomCard from "../components/CustomCard";
 
 const AdminDashboardPage = () => {
   const { allUsers, getAllUsers, getAllOrders, allOrders } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     getAllUsers();
@@ -16,16 +15,18 @@ const AdminDashboardPage = () => {
     <Container sx={{ mt: 20 }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ padding: 2 }} onClick={() => navigate("/admin/users")}>
-            <Typography variant="h6">Total Users</Typography>
-            <Typography variant="h4">{allUsers.length}</Typography>
-          </Paper>
+        <CustomCard
+            title="Total Users"
+            value={allUsers.length}
+            link="/admin/users"
+          />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ padding: 2 }} onClick={() => navigate("/admin/orders")}>
-            <Typography variant="h6">Total Orders</Typography>
-            <Typography variant="h4">{allOrders.length}</Typography>
-          </Paper>
+          <CustomCard
+            title="Total Orders"
+            value={allOrders.length}
+            link="/admin/orders"
+          />
         </Grid>
       </Grid>
     </Container>
