@@ -1,5 +1,6 @@
 import ProductForm from "../components/ProductForm";
-import { Container, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
+import ProductTable from "../components/ProductTable";
 
 const AddProductPage = () => {
   return (
@@ -7,7 +8,6 @@ const AddProductPage = () => {
       <Typography
         sx={{
           display: "flex",
-          flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -16,7 +16,15 @@ const AddProductPage = () => {
       >
         Add New Product
       </Typography>
-      <ProductForm />
+      {/* <ProductForm /> */}
+      <Grid container >
+        <Grid item xs={12} sm={6}>
+          <ProductForm />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <ProductTable />
+        </Grid>
+      </Grid>
     </Container>
   );
 };

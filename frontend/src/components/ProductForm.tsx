@@ -62,7 +62,7 @@ const ProductForm = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            '& .MuiTextField-root': { m: 2, width: '40ch' },
+            '& .MuiTextField-root': { m: 2, width: '50ch' },
         }}
         noValidate
         autoComplete="off"
