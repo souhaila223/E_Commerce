@@ -33,5 +33,19 @@ export const seedInitialProducts = async () => {
         console.error("Cannot seed db", err);
     }
     
-
 };
+
+
+
+export const deleteProduct = async (productId: string) => {
+    try {
+      const product = await productModel.findByIdAndDelete(productId);
+      if (!product) {
+        return { statusCode: 404, data: "Product not found" };
+      }
+      return { statusCode: 200, data: "Product deleted successfully" };
+    } catch (err) {
+      console.error("Error deleting product:", err);
+      return { statusCode: 500, data: "Something went wrong!" };
+    }
+  };

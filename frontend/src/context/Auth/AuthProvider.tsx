@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { Base_URL } from "../../constants/baseUrl";
+import { Product } from "../../types/Product";
 
 const USERNAME_KEY = "username";
 const TOKEN_KEY = "token";
@@ -19,6 +20,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [myOrders, setMyOrders] = useState<any[]>([]);
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [allOrders, setAllOrders] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]); 
 
   const isAuthenticated = !!token; // evaluate if token has a value
 
@@ -138,6 +140,30 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+  
+
+  const deleteProduct = async (productId: string) => {
+    try {
+      const response = await fetch(`${Base_URL}/product/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+
+      if (response.ok) {
+        // Successfully deleted, now refresh the product list
+        setProducts((prevProducts) => prevProducts.filter((product) => product._id !== productId));
+      } else {
+        const errorMessage = await response.text();
+        console.error("Failed to delete product:", errorMessage);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      throw error;
+    }
+  };
+
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
       const response = await fetch(`${Base_URL}/order/${orderId}/status`, {
@@ -175,6 +201,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         myOrders,
         allUsers,
         allOrders,
+        products,
         login,
         logout,
         getMyOrders,
@@ -183,6 +210,8 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         updateUserStatus,
         resetPassword,
         deleteUser,
+        deleteProduct,
+        setProducts,
         updateOrderStatus,
       }}
     >

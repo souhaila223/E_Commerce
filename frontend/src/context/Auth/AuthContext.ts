@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import { Product } from "../../types/Product";
 
 interface AuthContextType {
   username: string | null;
@@ -8,6 +9,7 @@ interface AuthContextType {
   myOrders: any[];
   allUsers: any[];
   allOrders: any[];
+  products: Product[];
   login: (username: string, token: string, isAdmin: boolean) => void;
   logout: () => void;
   getMyOrders: () => void;
@@ -16,6 +18,8 @@ interface AuthContextType {
   updateUserStatus: (userId: string, isAdmin: boolean) => void;
   resetPassword: (userId: string, newPassword: string) => void;
   deleteUser: (userId: string) => void;
+  deleteProduct: (productId: string) => void;
+  setProducts: (products: Product[]) => void;
   updateOrderStatus: (orderId: string, status: string) => void;
 }
 
@@ -27,6 +31,7 @@ export const AuthContext = createContext<AuthContextType>({
   myOrders: [],
   allUsers: [],
   allOrders: [],
+  products: [],
   login: () => {},
   logout: () => {},
   getMyOrders: () => {},
@@ -35,6 +40,8 @@ export const AuthContext = createContext<AuthContextType>({
   updateUserStatus: () => {},
   resetPassword: () => {},
   deleteUser: () => {},
+  deleteProduct: () => {},
+  setProducts: () => {},
   updateOrderStatus: () => {},
 });
 

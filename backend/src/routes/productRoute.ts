@@ -1,5 +1,5 @@
 import express from "express";
-import { addProduct, getAllProducts } from "../services/productService";
+import { addProduct, deleteProduct, getAllProducts } from "../services/productService";
 
 const router = express.Router();
 
@@ -17,6 +17,17 @@ router.post("/", async (req, res) => {
     const product = req.body;
     const newProduct = await addProduct(product);
     res.status(201).send(newProduct);
+  } catch (err) {
+    res.status(500).send("Something went wrong!");
+  }
+});
+
+
+router.delete("/:productId", async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { statusCode, data } = await deleteProduct(productId);
+    res.status(statusCode).send(data);
   } catch (err) {
     res.status(500).send("Something went wrong!");
   }
