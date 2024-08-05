@@ -62,7 +62,9 @@ const ProductForm = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            '& .MuiTextField-root': { m: 2, width: '50ch' },
+            padding: 7,
+            '& .MuiTextField-root': { m: 1, width: '32ch' },
+          '& .MuiInputBase-root': { height: '50px' }, // Adjusts height
         }}
         noValidate
         autoComplete="off"
@@ -76,6 +78,8 @@ const ProductForm = () => {
           onChange={(e) => setTitle(e.target.value)}
           error={errors.title}
           helperText={errors.title ? "Title is required" : ""}
+          size="small"
+          InputProps={{ style: { padding: '10px 12px' } }} // Adjust padding
         />
         <TextField
           required
@@ -85,6 +89,8 @@ const ProductForm = () => {
           onChange={(e) => setImage(e.target.value)}
           error={errors.image}
           helperText={errors.image ? "Image URL is required" : ""}
+          size="small"
+          InputProps={{ style: { padding: '10px 12px' } }} // Adjust padding
         />
         <TextField
           required
@@ -95,6 +101,8 @@ const ProductForm = () => {
           onChange={(e) => setPrice(e.target.value)}
           error={errors.price}
           helperText={errors.price ? "Price is required" : ""}
+          size="small"
+          InputProps={{ style: { padding: '10px 12px' } }} // Adjust padding
         />
         <TextField
           required
@@ -105,6 +113,8 @@ const ProductForm = () => {
           onChange={(e) => setStock(e.target.value)}
           error={errors.stock}
           helperText={errors.stock ? "Stock is required" : ""}
+          size="small"
+          InputProps={{ style: { padding: '10px 12px' } }} // Adjust padding
         />
         <Button type="submit" variant="contained" color="primary" sx={{ m: 2 }}>
           Add Product
