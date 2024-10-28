@@ -46,14 +46,17 @@ const RegisterPage = () => {
       return;
     }
 
-    const token = await response.json();
+    const data = await response.json();
+    const token = data.token;
+    const isAdmin = data.isAdmin || false; // Default to false if not provided
 
     if (!token) {
       setError("Incorrect token");
       return;
     }
 
-    login(email, token);
+    // Pass email, token, and isAdmin to the login function
+    login(email, token, isAdmin);
     navigate("/");
   };
 

@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-// import { useState } from "react";
 import { useCart } from "../context/Cart/CartContext";
 import { useFavorites } from "../context/Favorites/FavoritesContext";
 
@@ -14,12 +13,11 @@ interface Props {
   _id: string;
   title: string;
   image: string;
-  price: string;
+  price: number; // Changed to number
 }
 
 export default function ProductCard({ _id, title, image, price }: Props) {
   const { addItemToCart } = useCart();
-
   const { addFavoriteItem, removeFavoriteItem, favoriteItems } = useFavorites();
 
   const isFavorited = favoriteItems.some((item) => item.productId === _id);
@@ -28,9 +26,19 @@ export default function ProductCard({ _id, title, image, price }: Props) {
     if (isFavorited) {
       removeFavoriteItem(_id);
     } else {
-      addFavoriteItem({ productId: _id, title, image, price });
+      addFavoriteItem({ 
+        productId: _id, 
+        title, 
+        image, 
+        price: price.toString() // Convert to string here
+      });
     }
   };
+
+  const formattedPrice = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(price);
 
   return (
     <Card>
@@ -40,7 +48,7 @@ export default function ProductCard({ _id, title, image, price }: Props) {
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {price} $
+          {formattedPrice}
         </Typography>
       </CardContent>
       <CardActions

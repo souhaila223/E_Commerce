@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
+
+import { Container, Grid, Card, CardContent } from '@mui/material';
 import ProductForm from "../components/ProductForm";
 import ProductTable from "../components/ProductTable";
 
