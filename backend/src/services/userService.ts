@@ -33,7 +33,10 @@ export const register = async ({
   await newUser.save();
 
   return {
-    data:  generateJWT({ firstName, lastName, email, isAdmin }),
+    data: {
+      token: generateJWT({ firstName, lastName, email, isAdmin }),
+      isAdmin,
+    },
     statusCode: 200,
   };
 };
