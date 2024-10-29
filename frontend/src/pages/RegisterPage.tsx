@@ -47,7 +47,8 @@ const RegisterPage = () => {
     }
 
     const data = await response.json();
-    const { token, isAdmin } = data;
+    const token = data.token;
+    const isAdmin = data.isAdmin || false; // Default to false if not provided
 
     if (!token) {
       setError("Incorrect token");
