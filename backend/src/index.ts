@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 mongoose
-  .connect("mongodb://localhost:27017/e-commerce")
+  .connect(process.env.DATABASE_URL ||"mongodb://localhost:27017/e-commerce")
   .then(() => console.log("Mongo connected!"))
   .catch((err) => console.log("Failed to connect ", err));
 
