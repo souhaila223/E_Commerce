@@ -33,27 +33,27 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     localStorage.setItem(IS_ADMIN_KEY, String(isAdmin));
   };
 
-  const resetPassword = async (userId: string, newPassword: string) => {
-    try {
-      const response = await fetch(`${Base_URL}/user/${userId}/reset-password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ newPassword }),
-      });
+  // const resetPassword = async (userId: string, newPassword: string) => {
+  //   try {
+  //     const response = await fetch(`${Base_URL}/user/${userId}/reset-password`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({ newPassword }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to reset password');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to reset password');
+  //     }
 
-      // Handle successful password reset (e.g., show a message)
-    } catch (error) {
-      console.error(error);
-      // Handle errors (e.g., show a notification)
-    }
-  };
+  //     // Handle successful password reset (e.g., show a message)
+  //   } catch (error) {
+  //     console.error(error);
+  //     // Handle errors (e.g., show a notification)
+  //   }
+  // };
 
   const logout = () => {
     localStorage.removeItem(USERNAME_KEY);
@@ -208,7 +208,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         getAllUsers,
         getAllOrders,
         updateUserStatus,
-        resetPassword,
+        // resetPassword,
         deleteUser,
         deleteProduct,
         setProducts,

@@ -46,7 +46,7 @@ function Navbar() {
   };
 
   const HandleMyOrders = () => {
-    navigate("/admin/orders");
+    navigate("/my-orders");
     handleCloseUserMenu();
   };
   const handleLogout = () => {
@@ -174,9 +174,11 @@ function Navbar() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
+                    {!isAdmin && (
                     <MenuItem onClick={HandleMyOrders}>
-                      <Typography textAlign="center">Orders</Typography>
+                      <Typography textAlign="center">My Orders</Typography>
                     </MenuItem>
+                    )}
                     {isAdmin && (
                       <MenuItem onClick={handleUserManagement}>
                         <Typography textAlign="center">

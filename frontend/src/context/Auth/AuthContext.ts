@@ -16,7 +16,7 @@ interface AuthContextType {
   getAllUsers: () => void;
   getAllOrders: () => void; 
   updateUserStatus: (userId: string, isAdmin: boolean) => void;
-  resetPassword: (userId: string, newPassword: string) => void;
+  // resetPassword: (userId: string, newPassword: string) => void;
   deleteUser: (userId: string) => void;
   deleteProduct: (productId: string) => void;
   setProducts: (products: Product[]) => void;
@@ -38,7 +38,7 @@ export const AuthContext = createContext<AuthContextType>({
   getAllUsers: () => {},
   getAllOrders: () => {},
   updateUserStatus: () => {},
-  resetPassword: () => {},
+  // resetPassword: () => {},
   deleteUser: () => {},
   deleteProduct: () => {},
   setProducts: () => {},

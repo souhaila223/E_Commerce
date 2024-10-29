@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/Auth/AuthContext";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ConfirmationModal from "../components/ConfirmationModal";
-import PasswordResetModal from "../components/PasswordResetModal";
+// import PasswordResetModal from "../components/PasswordResetModal";
 import SuccessModal from "../components/SuccessModal";
-import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
+// import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import {
   Button,
   Container,
@@ -16,15 +16,16 @@ import {
 } from "@mui/material";
 
 const AdminUsersPage = () => {
-  const { allUsers, getAllUsers, deleteUser, resetPassword } = useAuth();
+  const { allUsers, getAllUsers, deleteUser } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [openResetModal, setOpenResetModal] = useState(false);
+  // const [openResetModal, setOpenResetModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     getAllUsers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOpenDelete = (userId: string) => {
@@ -46,24 +47,24 @@ const AdminUsersPage = () => {
     handleCloseDelete();
   };
 
-  const handleOpenReset = (userId: string) => {
-    setSelectedUserId(userId);
-    setOpenResetModal(true);
-  };
+  // const handleOpenReset = (userId: string) => {
+  //   setSelectedUserId(userId);
+  //   setOpenResetModal(true);
+  // };
 
-  const handleCloseReset = () => {
-    setOpenResetModal(false);
-    setSelectedUserId(null);
-  };
+  // const handleCloseReset = () => {
+  //   setOpenResetModal(false);
+  //   setSelectedUserId(null);
+  // };
 
-  const handleConfirmReset = async (newPassword: string) => {
-    if (selectedUserId) {
-      await resetPassword(selectedUserId, newPassword);
-        setSuccessMessage("Password reset successfully");
-        setOpenSuccessModal(true);
-    }
-    handleCloseReset();
-  };
+  // const handleConfirmReset = async (newPassword: string) => {
+  //   if (selectedUserId) {
+  //     await resetPassword(selectedUserId, newPassword);
+  //       setSuccessMessage("Password reset successfully");
+  //       setOpenSuccessModal(true);
+  //   }
+  //   handleCloseReset();
+  // };
 
   const handleCloseSuccess = () => {
     setOpenSuccessModal(false);
@@ -80,7 +81,7 @@ const AdminUsersPage = () => {
             <TableCell>Last Name</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Role</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -92,12 +93,12 @@ const AdminUsersPage = () => {
               <TableCell>{user.email}</TableCell>
               <TableCell>{String(user.isAdmin)}</TableCell>
               <TableCell>
-                <Button
+                {/* <Button
                   color="primary"
-                  onClick={() => handleOpenReset(user._id)}
+                  // onClick={() => handleOpenReset(user._id)}
                 >
                   <LockResetOutlinedIcon />
-                </Button>
+                </Button> */}
                 <Button
                   color="error"
                   onClick={() => handleOpenDelete(user._id)}
@@ -117,11 +118,11 @@ const AdminUsersPage = () => {
         message="Are you sure you want to delete this user?"
       />
 
-      <PasswordResetModal
-        open={openResetModal}
-        handleClose={handleCloseReset}
-        handleConfirm={handleConfirmReset}
-      />
+      {/* <PasswordResetModal
+        // open={openResetModal}
+        // handleClose={handleCloseReset}
+        // handleConfirm={handleConfirmReset}
+      /> */}
 
       <SuccessModal
         open={openSuccessModal}
